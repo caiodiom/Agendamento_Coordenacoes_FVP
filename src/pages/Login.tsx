@@ -124,13 +124,37 @@ const Login = () => {
           </form>
         </div>
 
-        {/* Link voltar */}
-        <p className="text-center mt-6">
-          <a href="/" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-            ← Voltar para a página inicial
-          </a>
-        </p>
+              {/*
+                Link voltar para a página inicial
+                (comentado para não ser exibido na página)
+              */}
+              {/*
+              <p className="text-center mt-6">
+                <a
+                  href="/"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  ← Voltar para a página inicial
+                </a>
+              </p>
+              */}
+
+              {/* Footer Compacto */}
+              <footer className="py-2 px-4 bg-muted text-center">
+                <p className="text-[10px] sm:text-xs text-muted-foreground">
+                  © {new Date().getFullYear()} Faculdade Vale do Pajeú
+                </p>
+
+                <p className="text-[10px] sm:text-xs      text-muted-foreground">
+                      Desenvolvido por 
+                  <a href="https://caiodiom.github.io/portfolio-caio/"      target="_blank" rel="noopener"> Caio Braga 🔗
+                  </a>
+                </p>
+
+
+              </footer>
       </div>
+      
     </div>
 
   );
