@@ -23,7 +23,7 @@ export const coordinations: Coordination[] = [
   {
     id: 'geral',
     name: 'Coordenação Geral',
-    shortName: 'Direção Academica',
+    shortName: 'Direção Acadêmica',
     icon: Building2,
     days: [1, 3, 5], // Segunda, Quarta e Sexta
     credentials: { user: 'geral', password: 'geral123' }
