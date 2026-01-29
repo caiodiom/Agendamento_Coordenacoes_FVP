@@ -1,0 +1,307 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    /* Cores da Faculdade Vale do Pajeú */
+    --background: 0 0% 98%;
+    --foreground: 220 30% 18%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 30% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 30% 18%;
+
+    /* Azul Marinho Institucional */
+    --primary: 225 60% 25%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Verde Institucional */
+    --secondary: 145 55% 30%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Verde Claro */
+    --accent: 145 45% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Amarelo/Dourado */
+    --gold: 40 90% 55%;
+    --gold-foreground: 220 30% 18%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 225 60% 25%;
+
+    --radius: 0.75rem;
+
+    /* Gradientes */
+    --gradient-primary: linear-gradient(135deg, hsl(225 60% 25%) 0%, hsl(225 60% 35%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(145 55% 30%) 0%, hsl(145 45% 40%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(40 90% 55%) 0%, hsl(35 85% 50%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(225 60% 22%) 0%, hsl(145 55% 25%) 100%);
+
+    /* Sombras */
+    --shadow-card: 0 4px 20px -4px hsl(225 60% 25% / 0.15);
+    --shadow-elevated: 0 10px 40px -10px hsl(225 60% 25% / 0.25);
+    --shadow-glow: 0 0 30px hsl(40 90% 55% / 0.3);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 30% 10%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 30% 14%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 30% 14%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 225 60% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 145 45% 40%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 145 45% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --gold: 40 90% 55%;
+    --gold-foreground: 220 30% 10%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 225 60% 50%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    @apply font-semibold;
+  }
+}
+
+@layer components {
+  .card-coordination {
+    @apply relative overflow-hidden rounded-xl bg-card border border-border p-6 transition-all duration-300;
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-coordination:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+    background: var(--gradient-secondary);
+    color: hsl(var(--secondary-foreground));
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .btn-gold {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+    background: var(--gradient-gold);
+    color: hsl(var(--gold-foreground));
+  }
+
+  .btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .time-slot {
+    @apply px-3 py-2 text-sm rounded-lg border transition-all duration-200 cursor-pointer;
+  }
+
+  .time-slot-available {
+    @apply bg-secondary/10 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground;
+  }
+
+  .time-slot-blocked {
+    @apply bg-muted border-muted-foreground/20 text-muted-foreground cursor-not-allowed opacity-60;
+  }
+
+  .time-slot-selected {
+    @apply bg-gold border-gold text-gold-foreground;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .modal-overlay {
+    @apply fixed inset-0 bg-foreground/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .modal-content {
+    @apply bg-card rounded-2xl shadow-2xl w-full max-w-2xl;
+    animation: slideUp 0.3s ease-out;
+    max-height: calc(100vh - 1rem);
+    overflow-y: auto;
+  }
+
+  @media (min-height: 700px) {
+    .modal-content {
+      max-height: 95vh;
+      overflow-y: auto;
+    }
+  }
+
+  .modal-content-compact {
+    @apply bg-card rounded-2xl shadow-2xl w-full max-w-2xl;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .header-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .icon-badge {
+    @apply w-14 h-14 rounded-xl flex items-center justify-center text-2xl;
+    background: var(--gradient-secondary);
+    color: hsl(var(--secondary-foreground));
+  }
+
+  .stat-card {
+    @apply bg-card rounded-xl p-6 border border-border;
+    box-shadow: var(--shadow-card);
+  }
+
+  .table-header {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200;
+  }
+
+  .day-chip {
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer;
+  }
+
+  .day-chip-available {
+    @apply bg-secondary/10 text-secondary border border-secondary hover:bg-secondary hover:text-secondary-foreground;
+  }
+
+  .day-chip-unavailable {
+    @apply bg-muted text-muted-foreground cursor-not-allowed;
+  }
+
+  .day-chip-selected {
+    @apply bg-secondary text-secondary-foreground;
+  }
+}
+
+@layer utilities {
+  .text-gradient-primary {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-secondary {
+    background: var(--gradient-secondary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gold {
+    color: hsl(var(--gold));
+  }
+
+  .bg-gold {
+    background-color: hsl(var(--gold));
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-gold {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(40 90% 55% / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px hsl(40 90% 55% / 0);
+  }
+}
+
+.animate-pulse-gold {
+  animation: pulse-gold 2s infinite;
+}
