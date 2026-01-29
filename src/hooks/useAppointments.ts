@@ -10,6 +10,7 @@ export interface Appointment {
   date: string; // YYYY-MM-DD
   time: string; // HH:mm
   attended: boolean;
+  resolved: boolean; // Se o problema foi resolvido
   notes: string;
   createdAt: number;
 }
@@ -48,7 +49,7 @@ export const useAppointments = (coordinationId?: string) => {
     return () => unsubscribe();
   }, [coordinationId]);
 
-  const createAppointment = async (data: Omit<Appointment, 'id' | 'attended' | 'notes' | 'createdAt'>) => {
+  const createAppointment = async (data: Omit<Appointment, 'id' | 'attended' | 'resolved' | 'notes' | 'createdAt'>) => {
     const appointmentsRef = ref(database, 'appointments');
     const newRef = push(appointmentsRef);
     
@@ -60,6 +61,7 @@ export const useAppointments = (coordinationId?: string) => {
       date: data.date,
       time: data.time,
       attended: false,
+      resolved: false,
       notes: '',
       createdAt: Date.now()
     });

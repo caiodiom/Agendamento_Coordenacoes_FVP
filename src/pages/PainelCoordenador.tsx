@@ -3,9 +3,10 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppointments, Appointment } from '@/hooks/useAppointments';
 import Header from '@/components/Header';
+import { AttendanceButtons, ResolvedButtons } from '@/components/AppointmentStatusButtons';
 import { 
-  LogOut, Calendar, Clock, User, CheckCircle, XCircle, 
-  MessageSquare, Filter, Loader2, Save
+  LogOut, Calendar, Clock, User, 
+  MessageSquare, Filter, Loader2, Save, FileText
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -37,6 +38,15 @@ const PainelCoordenador = () => {
     try {
       await updateAppointment(appointment.id, { attended: !appointment.attended });
       toast.success(appointment.attended ? 'Marcado como não compareceu' : 'Marcado como compareceu');
+    } catch (error) {
+      toast.error('Erro ao atualizar status');
+    }
+  };
+
+  const handleResolvedChange = async (appointment: Appointment) => {
+    try {
+      await updateAppointment(appointment.id, { resolved: !appointment.resolved });
+      toast.success(appointment.resolved ? 'Marcado como não resolvido' : 'Marcado como resolvido');
     } catch (error) {
       toast.error('Erro ao atualizar status');
     }
@@ -142,12 +152,17 @@ const PainelCoordenador = () => {
                 key={appointment.id}
                 className="bg-card rounded-xl border border-border p-4 md:p-6 shadow-sm"
               >
-                <div className="flex flex-col md:flex-row md:items-center gap-4">
-                  {/* Info do Aluno */}
+                {/* Header com info do aluno */}
+                <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2">
                       <User className="w-5 h-5 text-primary" />
                       <span className="font-semibold text-foreground">{appointment.studentName}</span>
+                      {appointment.period && (
+                        <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full font-medium">
+                          {appointment.period}
+                        </span>
+                      )}
                     </div>
                     <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
@@ -161,34 +176,37 @@ const PainelCoordenador = () => {
                     </div>
                   </div>
 
-                  {/* Status de Comparecimento */}
-                  <button
-                    onClick={() => handleAttendanceChange(appointment)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                      appointment.attended 
-                        ? 'bg-secondary/20 text-secondary' 
-                        : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                    }`}
-                  >
-                    {appointment.attended ? (
-                      <>
-                        <CheckCircle className="w-5 h-5" />
-                        <span>Compareceu</span>
-                      </>
-                    ) : (
-                      <>
-                        <XCircle className="w-5 h-5" />
-                        <span>Não compareceu</span>
-                      </>
-                    )}
-                  </button>
+                  {/* Botões de Status */}
+                  <div className="flex flex-wrap items-center gap-4">
+                    <AttendanceButtons 
+                      attended={appointment.attended} 
+                      onToggle={() => handleAttendanceChange(appointment)} 
+                    />
+                    <ResolvedButtons 
+                      resolved={appointment.resolved ?? false} 
+                      onToggle={() => handleResolvedChange(appointment)} 
+                    />
+                  </div>
                 </div>
+
+                {/* Motivo do Agendamento */}
+                {appointment.reason && (
+                  <div className="mt-3 p-3 bg-muted/50 rounded-lg">
+                    <div className="flex items-start gap-2">
+                      <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <span className="text-xs font-medium text-muted-foreground">Motivo:</span>
+                        <p className="text-sm text-foreground">{appointment.reason}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Anotações */}
                 <div className="mt-4 pt-4 border-t border-border">
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
                     <MessageSquare className="w-4 h-4" />
-                    Anotações
+                    Anotações do Coordenador
                   </label>
                   <div className="flex gap-2">
                     <input
@@ -213,7 +231,6 @@ const PainelCoordenador = () => {
           </div>
         )}
       </main>
-
       {/* Footer Compacto */}
       <footer className="py-2 px-4 bg-muted text-center">
         <p className="text-[10px] sm:text-xs text-muted-foreground">
