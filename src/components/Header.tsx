@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ title = "Sistema de Agendamento", showL
         </div>
         <div className="text-right hidden md:block">
           <p className="text-sm opacity-80">Atendimento</p>
-          <p className="font-semibold">18:30 - 21:30</p>
+          <p className="font-semibold">18:30 - 22:00</p>
         </div>
       </div>
     </header>

@@ -139,23 +139,11 @@ const Login = () => {
               </p>
               */}
 
-              {/* Footer Compacto */}
-              <footer className="py-2 px-4 bg-muted text-center">
-                <p className="text-[10px] sm:text-xs text-muted-foreground">
-                  © {new Date().getFullYear()} Faculdade Vale do Pajeú
-                </p>
-
-                <p className="text-[10px] sm:text-xs      text-muted-foreground">
-                      Desenvolvido por 
-                  <a href="https://caiodiom.github.io/portfolio-caio/"      target="_blank" rel="noopener"> Caio Braga 🔗
-                  </a>
-                </p>
-
-
-              </footer>
+              
       </div>
       
     </div>
+    
 
   );
 };
