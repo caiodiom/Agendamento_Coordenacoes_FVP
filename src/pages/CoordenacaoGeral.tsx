@@ -6,27 +6,14 @@ import Header from '@/components/Header';
 import { AttendanceButtons, ResolvedButtons } from '@/components/AppointmentStatusButtons';
 import { coordinations, getCoordinationById } from '@/lib/coordinations';
 import {
-  LogOut,
-  Calendar,
-  Clock,
-  User,
-  CheckCircle,
-  Filter,
-  Loader2,
-  Save,
-  Building2,
-  BarChart3,
-  Users,
-  TrendingUp,
-  FileText,
+  LogOut, Calendar, Clock, User, CheckCircle,
+  Filter, Loader2, Save, Building2, BarChart3,
+  Users, TrendingUp, FileText
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-
-// 🔴 IMPORT DO LOGO (JPG)
-import logoFVP from '@/assets/logo-fvp.jpg';
 
 const CoordenacaoGeral = () => {
   const { user, logout, isAuthenticated, isGeneralCoordinator } = useAuth();
@@ -57,7 +44,7 @@ const CoordenacaoGeral = () => {
     return date.toLocaleDateString('pt-BR');
   };
 
-  /* ================= EXPORTAÇÃO PDF ================= */
+  /* ================= EXPORTAR PDF ================= */
   const exportToPDF = () => {
     if (filteredAppointments.length === 0) {
       toast.error('Nenhum dado para exportar');
@@ -66,26 +53,12 @@ const CoordenacaoGeral = () => {
 
     const doc = new jsPDF('landscape');
 
-    /* LOGO */
-    doc.addImage(logoFVP, 'JPEG', 14, 10, 28, 28);
-
-    /* CABEÇALHO */
-    doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
-    doc.text('Faculdade Vale do Pajeú', 48, 20);
+    doc.text('Relatório de Agendamentos', 14, 15);
 
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(11);
-    doc.text('Relatório de Agendamentos', 48, 28);
+    doc.setFontSize(10);
+    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 14, 22);
 
-    doc.setFontSize(9);
-    doc.text(
-      `Gerado em: ${new Date().toLocaleDateString('pt-BR')}`,
-      48,
-      34
-    );
-
-    /* TABELA */
     const columns = [
       'Aluno',
       'Período',
@@ -100,6 +73,7 @@ const CoordenacaoGeral = () => {
 
     const rows = filteredAppointments.map(apt => {
       const coord = getCoordinationById(apt.coordinationId);
+
       return [
         apt.studentName,
         apt.period || '-',
@@ -116,19 +90,14 @@ const CoordenacaoGeral = () => {
     autoTable(doc, {
       head: [columns],
       body: rows,
-      startY: 42,
+      startY: 28,
       styles: { fontSize: 9 },
       headStyles: { fillColor: [30, 41, 59] },
       alternateRowStyles: { fillColor: [245, 247, 250] },
       margin: { left: 10, right: 10 },
     });
 
-    doc.save(
-      `relatorio_faculdade_vale_do_pajeu_${new Date()
-        .toISOString()
-        .split('T')[0]}.pdf`
-    );
-
+    doc.save(`agendamentos_${new Date().toISOString().split('T')[0]}.pdf`);
     toast.success('PDF gerado com sucesso!');
   };
   /* ================================================= */
@@ -188,10 +157,29 @@ const CoordenacaoGeral = () => {
             const coord = getCoordinationById(appointment.coordinationId);
             return (
               <div key={appointment.id} className="bg-card p-4 rounded-xl border mb-4">
-                <p className="font-semibold">{appointment.studentName}</p>
-                <p className="text-sm text-muted-foreground">
-                  {coord?.shortName} • {formatDate(appointment.date)} • {appointment.time}
-                </p>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-semibold">{appointment.studentName}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {coord?.shortName} • {formatDate(appointment.date)} • {appointment.time}
+                    </p>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <AttendanceButtons
+                      attended={appointment.attended}
+                      onToggle={() =>
+                        updateAppointment(appointment.id, { attended: !appointment.attended })
+                      }
+                    />
+                    <ResolvedButtons
+                      resolved={appointment.resolved ?? false}
+                      onToggle={() =>
+                        updateAppointment(appointment.id, { resolved: !appointment.resolved })
+                      }
+                    />
+                  </div>
+                </div>
               </div>
             );
           })
