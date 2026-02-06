@@ -6,9 +6,9 @@ import Header from '@/components/Header';
 import { AttendanceButtons, ResolvedButtons } from '@/components/AppointmentStatusButtons';
 import { coordinations, getCoordinationById } from '@/lib/coordinations';
 import {
-  LogOut, Calendar, Clock, User, CheckCircle,
+   LogOut, Calendar, Clock, User, CheckCircle, 
   Filter, Loader2, Save, Building2, BarChart3,
-  Users, TrendingUp, FileSpreadsheet, FileText
+  Users, TrendingUp, FileDown, FileText, BookOpen
 } from 'lucide-react';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
@@ -227,14 +227,15 @@ const CoordenacaoGeral = () => {
       const coord = getCoordinationById(apt.coordinationId);
       return [
         apt.studentName,
-        apt.period || '-',
+        apt.course || '-',
+        apt.period  || '-',
         coord?.shortName || apt.coordinationId,
         formatDate(apt.date),
         apt.time,
-        apt.reason || '-',
+        (apt.reason || '-').substring(0, 25),
         apt.attended ? 'Sim' : 'Não',
         apt.resolved ? 'Sim' : 'Não',
-        apt.notes || '-'
+        (apt.notes || '-').substring(0, 25)
       ];
     });
 
@@ -243,6 +244,7 @@ const CoordenacaoGeral = () => {
       startY: 68,
       head: [[
         'Aluno',
+        'Curso',
         'Período',
         'Coordenação',
         'Data',
@@ -273,14 +275,15 @@ const CoordenacaoGeral = () => {
       // Estilos das colunas específicas
       columnStyles: {
         0: { cellWidth: 40 }, // Aluno
-        1: { cellWidth: 20, halign: 'center' }, // Período
-        2: { cellWidth: 35 }, // Coordenação
-        3: { cellWidth: 25, halign: 'center' }, // Data
-        4: { cellWidth: 18, halign: 'center' }, // Horário
-        5: { cellWidth: 50 }, // Motivo
-        6: { cellWidth: 22, halign: 'center' }, // Compareceu
-        7: { cellWidth: 22, halign: 'center' }, // Resolvido
-        8: { cellWidth: 45 } // Anotações
+        1: { cellWidth: 15, halign: 'center' }, //Curso
+        2: { cellWidth: 20, halign: 'center' }, // Período
+        3: { cellWidth: 30, halign: 'center' }, // Coordenação
+        4: { cellWidth: 20, halign: 'center' }, // Data
+        5: { cellWidth: 20, halign: 'center' }, // Horário
+        6: { cellWidth: 35, halign: 'center' }, // Motivo
+        7: { cellWidth: 25, halign: 'center' }, // Compareceu
+        8: { cellWidth: 20, halign: 'center' }, // Resolvido
+        9: { cellWidth: 45 } // Anotações
       },
       // Margens
       margin: { left: margin, right: margin },
@@ -418,7 +421,7 @@ const CoordenacaoGeral = () => {
                 onClick={exportToPDF}
                 className="btn-gold py-2 px-4 flex items-center gap-2 text-sm"
               >
-                <FileSpreadsheet className="w-4 h-4" />
+                <FileDown className="w-4 h-4" />
                 Exportar PDF
               </button>
             </div>
@@ -455,6 +458,13 @@ const CoordenacaoGeral = () => {
                       <div className="flex items-center gap-2">
                         <User className="w-5 h-5 text-primary" />
                         <span className="font-semibold text-foreground">{appointment.studentName}</span>
+                        {appointment.course && (
+                          <span className="px-2 py-0.5 bg-secondary/10 text-secondary text-xs rounded-full font-medium flex items-center gap-1">
+                            <BookOpen className="w-3 h-3" />
+                            {appointment.course}
+                          </span>
+                        )}
+                        
                         {appointment.period && (
                           <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full font-medium">
                             {appointment.period}

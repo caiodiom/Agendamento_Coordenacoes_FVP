@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ title = "Sistema de Agendamento", showL
           )}
           <div>
             <h1 className="text-xl md:text-2xl font-bold">{title}</h1>
-            <p className="text-sm opacity-90 hidden sm:block">Faculdade Vale do Pajeú</p>
+            <p className="text-sm opacity-90 hidden sm:block">Faculdade Vale do Pajeú - São José do Egito</p>
           </div>
         </div>
         <div className="text-right hidden md:block">

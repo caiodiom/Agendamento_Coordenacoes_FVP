@@ -6,6 +6,7 @@ export interface Appointment {
   coordinationId: string;
   studentName: string;
   period: string; // P1 a P10
+  course?: string; // Curso do aluno (apenas para coord. geral)
   reason: string; // Motivo do agendamento
   date: string; // YYYY-MM-DD
   time: string; // HH:mm
@@ -57,6 +58,7 @@ export const useAppointments = (coordinationId?: string) => {
       coordinationId: data.coordinationId,
       studentName: data.studentName,
       period: data.period || '',
+      course: data.course || '',
       reason: data.reason || '',
       date: data.date,
       time: data.time,

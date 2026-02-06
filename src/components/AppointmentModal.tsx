@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Clock, User, CheckCircle, Loader2, FileText, GraduationCap } from 'lucide-react';
+import { X, Calendar, Clock, User, CheckCircle, Loader2, FileText, GraduationCap, BookOpen } from 'lucide-react';
 import { Coordination, dayNames, timeSlots } from '@/lib/coordinations';
 import { useAppointments } from '@/hooks/useAppointments';
 import { toast } from 'sonner';
@@ -12,14 +12,29 @@ interface AppointmentModalProps {
 // Opções de período
 const PERIODS = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10'];
 
+// Cursos disponíveis (para Coordenação Geral)
+const COURSES = [
+  'Direito',
+  'Psicologia',
+  'Ciências Contábeis',
+  'Administração',
+  'Pedagogia',
+  'Enfermagem',
+  'Medicina Veterinária',
+  'Odontologia'
+];
+
 const AppointmentModal: React.FC<AppointmentModalProps> = ({ coordination, onClose }) => {
   const [studentName, setStudentName] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('');
   const [reason, setReason] = useState('');
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  
+  const isGeneralCoordination = coordination.id === 'geral';
   
   const { createAppointment, getBookedSlots } = useAppointments(coordination.id);
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
@@ -70,6 +85,11 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({ coordination, onClo
       return;
     }
 
+    if (isGeneralCoordination && !selectedCourse) {
+      toast.error('Por favor, selecione seu curso');
+      return;
+    }
+
     if (!reason.trim()) {
       toast.error('Por favor, informe o motivo do agendamento');
       return;
@@ -92,6 +112,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({ coordination, onClo
         coordinationId: coordination.id,
         studentName: studentName.trim(),
         period: selectedPeriod,
+        course: isGeneralCoordination ? selectedCourse : undefined,
         reason: reason.trim(),
         date: selectedDate,
         time: selectedTime
@@ -135,6 +156,12 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({ coordination, onClo
               <User className="w-4 h-4 text-muted-foreground" />
               <span>{studentName} - {selectedPeriod}</span>
             </div>
+            {isGeneralCoordination && selectedCourse && (
+              <div className="flex items-center gap-2 mb-2">
+                <BookOpen className="w-4 h-4 text-muted-foreground" />
+                <span>{selectedCourse}</span>
+              </div>
+            )}
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-4 h-4 text-muted-foreground" />
               <span className="truncate">{reason}</span>
@@ -148,6 +175,11 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({ coordination, onClo
               <span>{selectedTime}</span>
             </div>
           </div>
+
+          <p className="text-xs text-destructive font-medium text-center mb-3">
+            ⚠️ Atenção: recomendamos que registre a data e o horário do atendimento
+            ou salve um print desta tela como comprovante.
+          </p>
           
           <button onClick={onClose} className="btn-primary w-full py-2">
             Fechar
@@ -183,40 +215,99 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({ coordination, onClo
 
         {/* Form Compacto */}
         <form onSubmit={handleSubmit} className="p-3 sm:p-4 space-y-3">
-          {/* Nome e Período na mesma linha */}
-          <div className="flex gap-2">
-            <div className="flex-1">
-              <label className="block text-xs font-medium text-foreground mb-1">
-                <User className="w-3 h-3 inline mr-1" />
-                Nome Completo
-              </label>
-              <input
-                type="text"
-                value={studentName}
-                onChange={e => setStudentName(e.target.value)}
-                placeholder="Seu nome"
-                className="input-field py-2 text-sm"
-                required
-              />
+          {/* Layout condicional baseado no tipo de coordenação */}
+          {isGeneralCoordination ? (
+            <>
+              {/* Coordenação Geral: Nome em linha completa */}
+              <div>
+                <label className="block text-xs font-medium text-foreground mb-1">
+                  <User className="w-3 h-3 inline mr-1" />
+                  Nome Completo
+                </label>
+                <input
+                  type="text"
+                  value={studentName}
+                  onChange={e => setStudentName(e.target.value)}
+                  placeholder="Seu nome"
+                  className="input-field py-2 text-sm"
+                  required
+                />
+              </div>
+
+              {/* Curso e Período lado a lado */}
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label className="block text-xs font-medium text-foreground mb-1">
+                    <BookOpen className="w-3 h-3 inline mr-1" />
+                    Curso
+                  </label>
+                  <select
+                    value={selectedCourse}
+                    onChange={e => setSelectedCourse(e.target.value)}
+                    className="input-field py-2 text-sm"
+                    required
+                  >
+                    <option value="">Selecione seu curso</option>
+                    {COURSES.map(course => (
+                      <option key={course} value={course}>{course}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="w-24 sm:w-28">
+                  <label className="block text-xs font-medium text-foreground mb-1">
+                    <GraduationCap className="w-3 h-3 inline mr-1" />
+                    Período
+                  </label>
+                  <select
+                    value={selectedPeriod}
+                    onChange={e => setSelectedPeriod(e.target.value)}
+                    className="input-field py-2 text-sm"
+                    required
+                  >
+                    <option value="">Selecione</option>
+                    {PERIODS.map(p => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </>
+          ) : (
+            /* Demais coordenações: Nome e Período lado a lado */
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <label className="block text-xs font-medium text-foreground mb-1">
+                  <User className="w-3 h-3 inline mr-1" />
+                  Nome Completo
+                </label>
+                <input
+                  type="text"
+                  value={studentName}
+                  onChange={e => setStudentName(e.target.value)}
+                  placeholder="Seu nome"
+                  className="input-field py-2 text-sm"
+                  required
+                />
+              </div>
+              <div className="w-24 sm:w-28">
+                <label className="block text-xs font-medium text-foreground mb-1">
+                  <GraduationCap className="w-3 h-3 inline mr-1" />
+                  Período
+                </label>
+                <select
+                  value={selectedPeriod}
+                  onChange={e => setSelectedPeriod(e.target.value)}
+                  className="input-field py-2 text-sm"
+                  required
+                >
+                  <option value="">Selecione</option>
+                  {PERIODS.map(p => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="w-24 sm:w-28">
-              <label className="block text-xs font-medium text-foreground mb-1">
-                <GraduationCap className="w-3 h-3 inline mr-1" />
-                Período
-              </label>
-              <select
-                value={selectedPeriod}
-                onChange={e => setSelectedPeriod(e.target.value)}
-                className="input-field py-2 text-sm"
-                required
-              >
-                <option value="">Selecione</option>
-                {PERIODS.map(p => (
-                  <option key={p} value={p}>{p}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+          )}
 
           {/* Motivo do Agendamento */}
           <div>
@@ -306,7 +397,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({ coordination, onClo
           {/* Botão Confirmar */}
           <button
             type="submit"
-            disabled={isSubmitting || !studentName || !selectedPeriod || !reason || !selectedDate || !selectedTime}
+            disabled={isSubmitting || !studentName || !selectedPeriod || (isGeneralCoordination && !selectedCourse) || !reason || !selectedDate || !selectedTime}
             className="btn-secondary w-full flex items-center justify-center gap-2 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
