@@ -49,7 +49,7 @@ export const coordinations: Coordination[] = [
     name: 'Coordenação de Ciências Contábeis',
     shortName: 'Contábeis',
     icon: Calculator,
-    days: [1, 2], // Segunda, Terça
+    days: [2, 4], // Terça, Quinta
     credentials: { user: 'contabeis', password: 'contabeis123' }
   },
   {
@@ -57,7 +57,7 @@ export const coordinations: Coordination[] = [
     name: 'Coordenação de Administração',
     shortName: 'Administração',
     icon: Briefcase,
-    days: [3, 4], // Quarta, Quinta
+    days: [2, 4], // Terça, Quinta
     credentials: { user: 'administracao', password: 'administracao123' }
   },
   {
@@ -65,7 +65,7 @@ export const coordinations: Coordination[] = [
     name: 'Coordenação de Pedagogia',
     shortName: 'Pedagogia',
     icon: GraduationCap,
-    days: [2, 5], // Terça, Sexta
+    days: [1, 3], // Segunda, Quarta
     credentials: { user: 'pedagogia', password: 'pedagogia123' }
   },
   {
@@ -81,7 +81,7 @@ export const coordinations: Coordination[] = [
     name: 'Coordenação de Medicina Veterinária',
     shortName: 'Veterinária',
     icon: Dog,
-    days: [4, 5], // Quinta, Sexta
+    days: [1, 2], // Segunda, Terça
     credentials: { user: 'veterinaria', password: 'veterinaria123' }
   },
   {
@@ -89,7 +89,7 @@ export const coordinations: Coordination[] = [
     name: 'Coordenação de Odontologia',
     shortName: 'Odontologia',
     icon: SmilePlus,
-    days: [3, 5], // Quarta, Sexta
+    days: [2, 4], // Terça, Quinta
     credentials: { user: 'odontologia', password: 'odontologia123' }
   }
 ];
